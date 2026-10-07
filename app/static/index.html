@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102d32">
+  <title>Atlas — AI Travel Planner</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Atlas home">
+        <span class="brand-mark" aria-hidden="true">✳</span>
+        <span>atlas<span class="brand-dot">.</span></span>
+      </a>
+      <div class="header-right">
+        <span id="mode-badge" class="mode-badge">Checking mode</span>
+        <a class="api-link" href="/docs">API docs <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> YOUR NEXT JOURNEY STARTS HERE</p>
+          <h1 id="page-title">A better trip starts with <em>a better plan.</em></h1>
+          <p class="hero-description">Tell us where you want to go. Atlas will build a day-by-day draft you can shape, revise, and approve before it becomes your final itinerary.</p>
+          <div class="hero-points" aria-label="How it works">
+            <span><b>01</b> Share your trip</span>
+            <span><b>02</b> Review the draft</span>
+            <span><b>03</b> Make it yours</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="sun"></div>
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="postcard">
+            <div class="postcard-stamp">A</div>
+            <div class="postcard-line"></div>
+            <div class="postcard-line short"></div>
+            <div class="postcard-bottom">EXPLORE MORE <span>↗</span></div>
+          </div>
+          <span class="art-star star-one">✳</span><span class="art-star star-two">✳</span>
+        </div>
+      </section>
+
+      <section class="planner-layout" aria-label="Trip planner">
+        <div class="form-column">
+          <div class="section-heading">
+            <p class="eyebrow small">THE DETAILS</p>
+            <h2>Plan your escape</h2>
+            <p>Start with the essentials. You can refine the draft later.</p>
+          </div>
+          <form id="plan-form" class="planner-form">
+            <div class="field">
+              <label for="destination">Where are you going?</label>
+              <input id="destination" name="destination" type="text" placeholder="e.g. Kyoto, Japan" required minlength="2" autocomplete="off">
+            </div>
+            <div class="field-grid">
+              <div class="field"><label for="start-date">Start date</label><input id="start-date" name="start_date" type="date" required></div>
+              <div class="field"><label for="end-date">End date</label><input id="end-date" name="end_date" type="date" required></div>
+            </div>
+            <div class="field-grid budget-grid">
+              <div class="field"><label for="budget-min">Budget from</label><input id="budget-min" name="budget_min" type="number" min="0" step="0.01" value="1000" required></div>
+              <div class="field"><label for="budget-max">Budget up to</label><input id="budget-max" name="budget_max" type="number" min="1" step="0.01" value="2000" required></div>
+            </div>
+            <div class="field-grid compact-grid">
+              <div class="field"><label for="currency">Currency</label><select id="currency" name="currency"><option>USD</option><option>EUR</option><option>GBP</option><option>INR</option><option>JPY</option><option>AUD</option></select></div>
+              <div class="field"><label for="travelers">Travelers</label><input id="travelers" name="travelers" type="number" min="1" max="30" value="2" required></div>
+            </div>
+            <div class="field">
+              <label for="interests">What are you into?</label>
+              <input id="interests" name="interests" type="text" placeholder="Art, food, history, nature" required>
+              <p class="field-hint">Separate interests with commas.</p>
+            </div>
+            <button id="create-button" class="button button-primary" type="submit">Create my itinerary <span aria-hidden="true">↗</span></button>
+          </form>
+          <p class="privacy-note">Your draft is saved locally by the planner while you review it.</p>
+        </div>
+
+        <div class="results-column">
+          <div id="empty-state" class="empty-card">
+            <div class="empty-icon" aria-hidden="true">✦</div>
+            <p class="eyebrow small">YOUR CANVAS IS READY</p>
+            <h2>Every great trip starts somewhere.</h2>
+            <p>Fill in the details and your itinerary will appear here. You stay in control of the final plan.</p>
+            <div class="empty-route" aria-hidden="true"><span></span><i></i><span></span></div>
+          </div>
+
+          <div id="workspace" class="workspace" hidden>
+            <div class="workspace-top">
+              <div><p class="eyebrow small">YOUR TRIP</p><h2 id="workspace-title">Your itinerary</h2></div>
+              <button id="new-trip" class="button button-ghost" type="button">New trip</button>
+            </div>
+            <div class="status-row">
+              <span id="status-pill" class="status-pill">Preparing</span>
+              <span id="plan-id" class="plan-id"></span>
+            </div>
+            <p id="status-description" class="status-description" role="status" aria-live="polite"></p>
+            <div id="mode-note" class="mode-note" hidden></div>
+            <div id="research" class="research-section" hidden></div>
+            <div id="itinerary" class="itinerary-section" hidden></div>
+
+            <section id="review-panel" class="review-panel" aria-labelledby="review-title" hidden>
+              <p class="eyebrow small">YOUR CALL</p>
+              <h3 id="review-title">Make this trip yours</h3>
+              <p>Approve the draft or tell Atlas what to change. Revised plans return here for another look.</p>
+              <button id="approve-button" class="button button-primary" type="button">Approve this plan <span aria-hidden="true">✓</span></button>
+              <div class="review-divider"><span>OR REFINE IT</span></div>
+              <label for="reject-feedback">Request a full revision</label>
+              <textarea id="reject-feedback" rows="3" placeholder="e.g. Make Day 2 more relaxed and add more local food."></textarea>
+              <button id="reject-button" class="button button-secondary" type="button">Revise the draft</button>
+              <div class="review-separator"></div>
+              <label for="modify-day">Change one day</label>
+              <select id="modify-day"></select>
+              <label class="sr-only" for="modify-request">Change request</label>
+              <textarea id="modify-request" rows="3" placeholder="e.g. Replace the museum with a food tour."></textarea>
+              <button id="modify-button" class="button button-secondary" type="button">Update this day</button>
+            </section>
+            <div id="final-banner" class="final-banner" hidden><span aria-hidden="true">✳</span><div><strong>Your plan is approved.</strong><p>It’s ready to use. Check reservations, opening hours, and local conditions before you go.</p></div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><span>atlas<span class="brand-dot">.</span></span><span>Thoughtful travel starts with a plan.</span></footer>
+  </div>
+  <div id="toast" class="toast" role="alert" hidden></div>
+</body>
+</html>
+
