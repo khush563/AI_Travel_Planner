@@ -2,7 +2,7 @@
 
 A browser-based travel planner and FastAPI service that research a destination, draft a day-by-day trip, and wait for a human decision before finalizing it. LangGraph drives the workflow and stores its checkpoints in SQLite, so review can resume after an application restart.
 
-The browser UI is served at `http://127.0.0.1:8000/`. It supports creating a trip, seeing research and daily plans, requesting a full revision, changing one day, approving the draft, and reopening a plan stored in the same browser. The API remains available at `/docs`.
+The app includes a browser UI for planning trips and a FastAPI interface for the backend workflow.
 
 ## Workflow
 
@@ -32,7 +32,7 @@ The existing project folder on this Mac has a `.venv` environment. From that fol
 ./start.sh
 ```
 
-Then open [the planner](http://127.0.0.1:8000/). It starts in demo mode without API keys.
+The app starts in demo mode without API keys.
 
 The downloadable ZIP excludes `.venv`, `.env`, and local database files. After extracting it, use Python 3.11 or newer to install dependencies. The system `python3` on this Mac is 3.9, so use a newer Python command such as `python3.12`. From the extracted project directory:
 
@@ -46,7 +46,7 @@ cp .env.example .env
 
 With `DEMO_MODE=auto`, the application starts in clearly labeled demo mode when either API key is missing. Demo mode uses sample activities and estimates, so the complete UI and human review flow work offline. To use live research and AI planning, set `OPENAI_API_KEY` and `SERPER_API_KEY` in `.env`; auto mode then switches to live. Set `DEMO_MODE=false` to require live mode, or `DEMO_MODE=true` to force a keyless demo. Open-Meteo needs no key. `LLM_MODEL` defaults to `gpt-4.1-mini`; change it to a model your account can use. For an OpenAI-compatible endpoint, set `LLM_PROVIDER=openai_compatible`, `LLM_BASE_URL`, `LLM_MODEL`, and `OPENAI_API_KEY` (the compatible provider's key).
 
-Open [the API docs](http://127.0.0.1:8000/docs) for the JSON endpoints. The database files are created in `.data/`, or under `DATABASE_DIR` if set. The Dockerfile runs one worker because SQLite and the in-process background queue are intended for a single-process local deployment.
+The API docs are available in the running app when launched locally. The database files are created in `.data/`, or under `DATABASE_DIR` if set. The Dockerfile runs one worker because SQLite and the in-process background queue are intended for a single-process local deployment.
 
 ## API example
 
